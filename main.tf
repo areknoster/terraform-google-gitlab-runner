@@ -78,8 +78,8 @@ resource "google_compute_instance" "ci_runner" {
   }
 
   network_interface {
-    network = "default"
-
+    network = var.network
+    subnetwork = var.subnetwork
     access_config {
       // Ephemeral IP
     }
@@ -108,6 +108,8 @@ docker-machine create --driver google \
     --google-machine-image ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20220419 \
     --google-tags ${var.ci_worker_instance_tags} \
     --google-use-internal-ip \
+    --google-network ${var.network} \
+    --google-subnetwork ${var.subnetwork} \
     ${var.gcp_resource_prefix}-test-machine
 
 docker-machine rm -y ${var.gcp_resource_prefix}-test-machine
@@ -137,7 +139,8 @@ sudo gitlab-runner register -n \
     --machine-machine-options "google-disk-type=pd-ssd" \
     --machine-machine-options "google-disk-size=${var.ci_worker_disk_size}" \
     --machine-machine-options "google-tags=${var.ci_worker_instance_tags}" \
-    --machine-machine-options "google-use-internal-ip" \
+    --machine-machine-options "google-network=${var.network}" \
+    --machine-machine-options "google-subnetwork=${var.subnetwork}" \
     && true
 
 echo "GitLab CI Runner installation complete"

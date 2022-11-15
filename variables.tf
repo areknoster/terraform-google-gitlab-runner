@@ -98,3 +98,14 @@ variable "docker_privileged" {
   default     = "false"
   description = "Give extended privileges to container."
 }
+
+variable "network" {
+  type = string
+  default = "default"
+  description = "GCP Network where runner will deployed to."
+}
+variable "subnetwork" {
+  type = string
+  default = "default"
+  description = "GCP Subnetwork where runner will deployed to."
+}
